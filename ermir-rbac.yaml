@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sva-app1
+  namespace: eri
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: epic
+  namespace: eri
+  rules:          
+  - apiGroups:  
+      - ''
+      - apps
+      - autoscaling
+      - batch
+      - extensions
+      - policy
+      - rbac.authorization.k8s.io      
+    resources:
+      - serviceaccount
+    verbs:
+      - list
+      - get
+      - delete
+      - watch
+      - delete
+      
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rolebinding
+  namespace: eri
+roleRef:
+  apiGroup:  rbac.authorization.k8s.io 
+  kind: Role
+  name: epic
+subjects:
+  - namespace: eri
+    kind: ServiceAccount
+    name: sva-app1
